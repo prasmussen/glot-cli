@@ -8,6 +8,14 @@ func List(baseUrl string) string {
     return join(baseUrl, "snippets")
 }
 
+func Create(baseUrl string) string {
+    return List(baseUrl)
+}
+
+func Update(baseUrl, id string) string {
+    return Get(baseUrl, id)
+}
+
 func Get(baseUrl, id string) string {
     return join(List(baseUrl), id)
 }

@@ -2,6 +2,10 @@ package util
 
 import (
     "os"
+    "fmt"
+    "io/ioutil"
+    "strings"
+    "path/filepath"
 )
 
 func FileExists(path string) bool {
@@ -29,13 +33,13 @@ type File struct {
 }
 
 func ReadFiles(path string) ([]*File, error) {
-    isRegular, err := util.IsRegularFile(path)
+    isRegular, err := IsRegularFile(path)
     if err != nil {
         return nil, err
     } else if !isRegular {
         return nil, fmt.Errorf("File (%s) is not a regular file", path)
     }
-        
+
     root := filepath.Dir(path)
 
     paths, err := collectPaths(root)

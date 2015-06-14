@@ -2,10 +2,17 @@ package main
 
 import (
     "os"
+    "fmt"
+    "path/filepath"
+    "./util"
     "./config"
     "./cli"
     "./snippets"
     "./run"
+)
+
+var (
+	AppPath = filepath.Join(util.Homedir(), ".glot")
 )
 
 func main() {
@@ -24,7 +31,14 @@ func main() {
 }
 
 func getConfig() *config.Config {
-    return config.ReadConfig("config.json")
+    configPath := filepath.Join(AppPath, "config")
+    cfg, err := config.ReadConfig(configPath)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to read config: %s\n", err.Error())
+        os.Exit(1)
+    }
+
+    return cfg
 }
 
 func newSnippet(args map[string]string) {

@@ -6,6 +6,7 @@ import (
     "fmt"
     "io/ioutil"
     "path/filepath"
+    "strings"
     "./api"
     "../util"
 )
@@ -27,8 +28,6 @@ func writeSnippet(basePath string, snippet *api.Snippet) {
         fmt.Fprintf(os.Stderr, "Failed to write meta file to disk: %s\n", err.Error())
         return
     }
-
-    fmt.Printf("Created %s\n", metaFilePath)
 }
 
 // Writes files to disk
@@ -103,4 +102,26 @@ func readMetaFile(path string) (*api.MetaSnippet, error) {
     meta := &api.MetaSnippet{}
     err = json.NewDecoder(f).Decode(meta)
     return meta, err
+}
+
+func findMainFile(names []string) string {
+    for _, name := range names {
+        base := filepath.Base(name)
+        if strings.HasPrefix(strings.ToLower(base), "main") {
+            return base
+        }
+    }
+
+    return names[0]
+}
+
+func toApiFiles(files []*util.File) []*api.File {
+    apiFiles := make([]*api.File, 0, len(files))
+    for _, f := range files {
+        apiFiles = append(apiFiles, &api.File{
+            Name: f.Name,
+            Content: f.Content,
+        })
+    }
+    return apiFiles
 }

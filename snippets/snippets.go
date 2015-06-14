@@ -162,22 +162,81 @@ func pushNew(cfg config, basePath string) {
         return
     }
 
+    lang, ok := language.DetermineLanguage(mainFile)
+    if !ok {
+        fmt.Fprintln(os.Stderr, "Failed to determine language")
+        return
+    }
+
     snippetData := &api.SnippetData{
-        Language: "todo",
+        Language: lang,
         Title: "untitled",
         Public: false,
         Files: toApiFiles(files),
     }
 
-    //api.Create(snippetData)
+    url := apiurl.Create(cfg.SnippetsApiBaseUrl())
+    token := cfg.SnippetsApiToken()
+    snippet, err := api.Create(url, token, snippetData)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to create snippet: %s\n", err.Error())
+        return
+    }
+
+    writeSnippet(".", snippet)
+    fmt.Printf("Saved snippet %s\n", snippet.Id)
 }
 
 func pushUpdate(cfg config, basePath string) {
+    fmt.Println("Updating...")
     // Read meta file
     meta, err := findReadMetaFile()
     if err != nil {
 
     }
 
-   fmt.Println(meta)
+    f, err := os.Open(".")
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to read files: %s\n", err.Error())
+        return
+    }
+
+    names, err := f.Readdirnames(0)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to read files: %s\n", err.Error())
+        return
+    }
+
+    // TODO: Preserve main file
+    mainFile := findMainFile(names)
+
+    files, err := util.ReadFiles(mainFile)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to read files: %s\n", err.Error())
+        return
+    }
+
+    lang, ok := language.DetermineLanguage(mainFile)
+    if !ok {
+        fmt.Fprintln(os.Stderr, "Failed to determine language")
+        return
+    }
+
+    snippetData := &api.SnippetData{
+        Language: lang,
+        Title: "untitled",
+        Public: false,
+        Files: toApiFiles(files),
+    }
+
+    url := apiurl.Update(cfg.SnippetsApiBaseUrl(), meta.Id)
+    token := cfg.SnippetsApiToken()
+    snippet, err := api.Update(url, token, snippetData)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to update snippet: %s\n", err.Error())
+        return
+    }
+
+    writeSnippet(".", snippet)
+    fmt.Printf("Updated snippet %s\n", snippet.Id)
 }

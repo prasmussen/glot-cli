@@ -1,33 +1,45 @@
 package config
 
+import (
+    "os"
+    "encoding/json"
+)
 
-func ReadConfig(path string) *Config {
-    return &Config{}
+func ReadConfig(path string) (*Config, error) {
+    cfg := &Config{}
+    f, err := os.Open(path)
+    if err != nil {
+        return nil, err
+    }
+
+    err = json.NewDecoder(f).Decode(cfg)
+    return cfg, err
 }
 
 type Config struct {
-    //data map[string]string
-    //Run struct {
-    //    ApiBaseUrl string `json:"apiBaseUrl"`
-    //} `json:"run"`
+    Run struct {
+        BaseUrl string `json:"baseUrl"`
+        Token string `json:"token"`
+    } `json:"run"`
 
-    //Snippets struct {
-    //    ApiBaseUrl string `json:"apiBaseUrl"`
-    //} `json:"snippets"`
+    Snippets struct {
+        BaseUrl string `json:"baseUrl"`
+        Token string `json:"token"`
+    } `json:"snippets"`
 }
 
 func (self *Config) RunApiBaseUrl() string {
-    return "https://run.glot.io/"
+    return self.Run.BaseUrl
 }
 
 func (self *Config) RunApiToken() string {
-    return "TODO"
+    return self.Snippets.Token
 }
 
 func (self *Config) SnippetsApiBaseUrl() string {
-    return "https://snippets.glot.io/"
+    return self.Snippets.BaseUrl
 }
 
 func (self *Config) SnippetsApiToken() string {
-    return "TODO"
+    return self.Snippets.Token
 }

@@ -1,6 +1,7 @@
 package api
 
 import (
+    "io"
     "net/http"
     "encoding/json"
 )
@@ -76,11 +77,41 @@ func Create(url, token string, data *SnippetData) (*Snippet, error) {
 
     // Start async writer
     go func() {
-        json.NewEncoder(jsonWriter).Encode(files)
+        json.NewEncoder(jsonWriter).Encode(data)
         jsonWriter.Close()
     }()
 
     req, err := http.NewRequest("POST", url, jsonReader)
+    req.Header.Set("Authorization", "Token " + token)
+    req.Header.Set("Content-Type", "application/json")
+
+    client := &http.Client{}
+    res, err := client.Do(req)
+    if err != nil {
+        return nil, err
+    }
+    defer res.Body.Close()
+
+    snippet := &Snippet{}
+    err = json.NewDecoder(res.Body).Decode(&snippet)
+    if err != nil {
+        return nil, err
+    }
+
+    return snippet, err
+}
+
+func Update(url, token string, data *SnippetData) (*Snippet, error) {
+    jsonReader, jsonWriter := io.Pipe() 
+    defer jsonReader.Close()
+
+    // Start async writer
+    go func() {
+        json.NewEncoder(jsonWriter).Encode(data)
+        jsonWriter.Close()
+    }()
+
+    req, err := http.NewRequest("PUT", url, jsonReader)
     req.Header.Set("Authorization", "Token " + token)
     req.Header.Set("Content-Type", "application/json")
 
