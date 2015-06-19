@@ -9,13 +9,13 @@ type handlerFn func(map[string]string)
 var handlers []*handler
 
 type handler struct {
-    pattern string
-    fn handlerFn
-    description string
+    Pattern string
+    Fn handlerFn
+    Description string
 }
 
 func (self *handler) splitPattern() []string {
-    return strings.Split(self.pattern, " ")
+    return strings.Split(self.Pattern, " ")
 }
 
 func (self *handler) matchArgs(args []string) bool {
@@ -62,19 +62,26 @@ func captureGroupName(s string) string {
 
 func AddHandler(pattern string, fn handlerFn, desc string) {
     handlers = append(handlers, &handler{
-        pattern: pattern,
-        fn: fn,
-        description: desc,
+        Pattern: pattern,
+        Fn: fn,
+        Description: desc,
     })
 }
 
 
-func Handle(args []string) {
+func Handle(args []string) bool {
     h := findHandler(args)
-    if h != nil {
-        capGroups := h.getCaptureGroups(args)
-        h.fn(capGroups)
+    if h == nil {
+        return false
     }
+
+    capGroups := h.getCaptureGroups(args)
+    h.Fn(capGroups)
+    return true
+}
+
+func GetHandlers() []*handler {
+    return handlers
 }
 
 func findHandler(args []string) *handler {

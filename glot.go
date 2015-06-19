@@ -28,7 +28,13 @@ func main() {
     cli.AddHandler("versions <language>", listVersions, "List available versions for a language")
     cli.AddHandler("run <path>", runLatest, "Run code")
     cli.AddHandler("run <path> --version <version>", runVersion, "Run code code with a specific language version")
-    cli.Handle(os.Args[1:])
+    cli.AddHandler("help", printHelp, "Print help")
+
+    ok := cli.Handle(os.Args[1:])
+    if !ok {
+        fmt.Fprintf(os.Stderr, "No valid arguments given, use '%s help' to see available commands\n", util.AppName())
+        os.Exit(1)
+    }
 }
 
 func newSnippet(args map[string]string) {
@@ -83,6 +89,15 @@ func runLatest(args map[string]string) {
 func runVersion(args map[string]string) {
     cfg := getConfig()
     run.Run(cfg, args["version"], args["path"])
+}
+
+func printHelp(args map[string]string) {
+    appName := util.AppName()
+    fmt.Printf("%s usage:\n\n", appName)
+
+    for _, h := range cli.GetHandlers() {
+        fmt.Printf("%s %s  (%s)\n", appName, h.Pattern, h.Description)
+    }
 }
 
 func getConfig() *config.Config {

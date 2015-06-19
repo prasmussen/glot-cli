@@ -1,6 +1,7 @@
 package util
 
 import (
+    "path/filepath"
     "runtime"
     "os"
     "fmt"
@@ -20,4 +21,8 @@ func PromptInput(msg string) string {
     var str string
     fmt.Scanln(&str)
     return str
+}
+
+func AppName() string {
+    return filepath.Base(os.Args[0])
 }
