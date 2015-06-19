@@ -3,29 +3,29 @@ package config
 import (
     "os"
     "encoding/json"
+    "io/ioutil"
+    "../util"
 )
 
-func ReadConfig(path string) (*Config, error) {
-    cfg := &Config{}
-    f, err := os.Open(path)
-    if err != nil {
-        return nil, err
-    }
+const (
+    defaultRunBaseUrl = "https://run.glot.io"
+    defaultSnippetsBaseUrl = "https://snippets.glot.io"
+)
 
-    err = json.NewDecoder(f).Decode(cfg)
-    return cfg, err
-}
 
 type Config struct {
-    Run struct {
-        BaseUrl string `json:"baseUrl"`
-        Token string `json:"token"`
-    } `json:"run"`
+    Run runConfig `json:"run"`
+    Snippets snippetsConfig`json:"snippets"`
+}
 
-    Snippets struct {
-        BaseUrl string `json:"baseUrl"`
-        Token string `json:"token"`
-    } `json:"snippets"`
+type runConfig struct {
+    BaseUrl string `json:"baseUrl"`
+    Token string `json:"token"`
+}
+
+type snippetsConfig struct {
+    BaseUrl string `json:"baseUrl"`
+    Token string `json:"token"`
 }
 
 func (self *Config) RunApiBaseUrl() string {
@@ -42,4 +42,40 @@ func (self *Config) SnippetsApiBaseUrl() string {
 
 func (self *Config) SnippetsApiToken() string {
     return self.Snippets.Token
+}
+
+func DefaultConfig() *Config {
+    return &Config{
+        Run: runConfig{
+            BaseUrl: defaultRunBaseUrl,
+            Token: "",
+        },
+        Snippets: snippetsConfig{
+            BaseUrl: defaultSnippetsBaseUrl,
+            Token: "",
+        },
+    }
+}
+
+func ReadConfig(path string) (*Config, error) {
+    cfg := &Config{}
+    f, err := os.Open(path)
+    if err != nil {
+        return nil, err
+    }
+
+    err = json.NewDecoder(f).Decode(cfg)
+    return cfg, err
+}
+
+func SaveConfig(path string, cfg *Config) error {
+    data, err := json.MarshalIndent(cfg, "", "    ")
+    if err != nil {
+        return err
+    }
+
+    if err = util.Mkdir(path); err != nil {
+        return err
+    }
+    return ioutil.WriteFile(path, data, 0600)
 }

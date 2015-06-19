@@ -8,6 +8,14 @@ import (
     "path/filepath"
 )
 
+func Mkdir(path string) error {
+    dir := filepath.Dir(path)
+    if FileExists(dir) {
+        return nil
+    }
+    return os.Mkdir(dir, 0700)
+}
+
 func FileExists(path string) bool {
     _, err := os.Stat(path)
     return err == nil

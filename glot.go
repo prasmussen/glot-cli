@@ -30,17 +30,6 @@ func main() {
     cli.Handle(os.Args[1:])
 }
 
-func getConfig() *config.Config {
-    configPath := filepath.Join(AppPath, "config")
-    cfg, err := config.ReadConfig(configPath)
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Failed to read config: %s\n", err.Error())
-        os.Exit(1)
-    }
-
-    return cfg
-}
-
 func newSnippet(args map[string]string) {
     snippets.NewSnippet(args["language"])
 }
@@ -88,4 +77,39 @@ func runLatest(args map[string]string) {
 func runVersion(args map[string]string) {
     cfg := getConfig()
     run.Run(cfg, args["version"], args["path"])
+}
+
+func getConfig() *config.Config {
+    configPath := filepath.Join(AppPath, "config")
+    return readOrCreateConfig(configPath)
+}
+
+func readOrCreateConfig(path string) *config.Config {
+    if util.FileExists(path) {
+        // Open existing config
+        cfg, err := config.ReadConfig(path)
+        if err != nil {
+            fmt.Fprintf(os.Stderr, "Failed to read config: %s\n", err.Error())
+            os.Exit(1)
+        }
+
+        return cfg
+    } else {
+        // Create new config
+        fmt.Println("Config not found, creating new...")
+        token := util.PromptInput("Enter API token: ")
+        cfg := config.DefaultConfig()
+        cfg.Run.Token = token
+        cfg.Snippets.Token = token
+
+        // Save config
+        err := config.SaveConfig(path, cfg)
+        if err != nil {
+            fmt.Fprintf(os.Stderr, "Failed to save config: %s\n", err.Error())
+            os.Exit(1)
+        }
+        fmt.Printf("Config saved to %s\n\n", path)
+
+        return cfg
+    }
 }
