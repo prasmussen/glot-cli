@@ -11,6 +11,10 @@ import (
     "./run"
 )
 
+const (
+    Version = "1.0.0"
+)
+
 var (
 	AppPath = filepath.Join(util.Homedir(), ".glot")
 )
@@ -28,6 +32,7 @@ func main() {
     cli.AddHandler("versions <language>", listVersions, "List available versions for a language")
     cli.AddHandler("run <path>", runLatest, "Run code")
     cli.AddHandler("run <path> --version <version>", runVersion, "Run code code with a specific language version")
+    cli.AddHandler("--version", printAppVersion, "Print application version")
     cli.AddHandler("help", printHelp, "Print help")
 
     ok := cli.Handle(os.Args[1:])
@@ -89,6 +94,10 @@ func runLatest(args map[string]string) {
 func runVersion(args map[string]string) {
     cfg := getConfig()
     run.Run(cfg, args["version"], args["path"])
+}
+
+func printAppVersion(args map[string]string) {
+    fmt.Printf("%s v%s\n", util.AppName(), Version)
 }
 
 func printHelp(args map[string]string) {
