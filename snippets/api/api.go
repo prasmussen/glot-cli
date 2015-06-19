@@ -1,7 +1,9 @@
 package api
 
 import (
+    "fmt"
     "io"
+    "io/ioutil"
     "net/http"
     "encoding/json"
 )
@@ -129,4 +131,31 @@ func Update(url, token string, data *SnippetData) (*Snippet, error) {
     }
 
     return snippet, err
+}
+
+func Delete(url, token string) error {
+    req, err := http.NewRequest("DELETE", url, nil)
+    req.Header.Set("Authorization", "Token " + token)
+
+    client := &http.Client{}
+    res, err := client.Do(req)
+    if err != nil {
+        return err
+    }
+
+    if res.StatusCode == 204 {
+        return nil
+    } else if res.StatusCode == 403 {
+        return fmt.Errorf("Not allowed to delete this snippet")
+    } else if res.StatusCode == 404 {
+        return fmt.Errorf("Snippet not found")
+    }
+
+    defer res.Body.Close()
+    body, _ := ioutil.ReadAll(res.Body)
+    msg := fmt.Sprintf("Unexpected status code: %d", res.StatusCode)
+    if len(body) > 0 {
+        msg = fmt.Sprintf("%s\n%s", msg, string(body))
+    }
+    return fmt.Errorf(msg)
 }

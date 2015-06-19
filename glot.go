@@ -21,6 +21,7 @@ func main() {
     //cli.AddHandler("snippets --page <n>", listSnippets, "List snippets")
     cli.AddHandler("meta <id>", printMetaSnippet, "Print snippet meta information")
     cli.AddHandler("clone <id>", cloneSnippet, "Clone snippet into a directory")
+    cli.AddHandler("delete <id>", deleteSnippet, "Delete snippet")
     cli.AddHandler("pull", pullSnippet, "Pull snippet from api, will overwrite local changes")
     cli.AddHandler("push", pushSnippet, "Push snippet to api, will overwrite remote changes")
     cli.AddHandler("languages", listLanguages, "List available languages available to run")
@@ -42,6 +43,11 @@ func printMetaSnippet(args map[string]string) {
 func cloneSnippet(args map[string]string) {
     cfg := getConfig()
     snippets.Clone(cfg, args["id"])
+}
+
+func deleteSnippet(args map[string]string) {
+    cfg := getConfig()
+    snippets.Delete(cfg, args["id"])
 }
 
 func pullSnippet(args map[string]string) {

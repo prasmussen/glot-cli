@@ -20,6 +20,10 @@ func Get(baseUrl, id string) string {
     return join(List(baseUrl), id)
 }
 
+func Delete(baseUrl, id string) string {
+    return Get(baseUrl, id)
+}
+
 func join(base string, components ...string) string {
     if !strings.HasSuffix(base, "/") {
         base = base + "/"

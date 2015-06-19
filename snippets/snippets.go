@@ -140,6 +140,20 @@ func Push(cfg config) {
     }
 }
 
+func Delete(cfg config, id string) {
+    fmt.Println("Deleting...")
+
+    url := apiurl.Delete(cfg.SnippetsApiBaseUrl(), id)
+    token := cfg.SnippetsApiToken()
+    err := api.Delete(url, token)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to delete snippet: %s\n", err.Error())
+        return
+    }
+
+    fmt.Printf("Done\n")
+}
+
 
 func pushNew(cfg config, basePath string) {
     f, err := os.Open(".")
