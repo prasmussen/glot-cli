@@ -2,10 +2,7 @@ package run
 
 import (
     "fmt"
-    "strings"
     "os"
-    "path/filepath"
-    "io/ioutil"
     "./apiurl"
     "./api"
     "../util"
@@ -50,7 +47,7 @@ func Run(cfg config, version, path string) {
         return
     }
 
-    files, err := readFiles(path, lang)
+    files, err := util.ReadFiles(path)
     if err != nil {
         fmt.Fprintf(os.Stderr, "Failed to read files: %s\n", err.Error())
         return
@@ -58,7 +55,7 @@ func Run(cfg config, version, path string) {
 
     url := apiurl.Run(cfg.RunApiBaseUrl(), lang, version)
     token := cfg.RunApiToken()
-    runResult, err := api.Run(url, token, files)
+    runResult, err := api.Run(url, token, toApiFiles(files))
     if err != nil {
         fmt.Fprintf(os.Stderr, "Failed to run code: %s\n", err.Error())
         return
@@ -69,97 +66,13 @@ func Run(cfg config, version, path string) {
     fmt.Fprint(os.Stderr, runResult.Error)
 }
 
-func readFiles(path, lang string) ([]*api.File, error) {
-    isRegular, err := util.IsRegularFile(path)
-    if err != nil {
-        return nil, err
-    } else if !isRegular {
-        return nil, fmt.Errorf("File (%s) is not a regular file", path)
-    }
-        
-    root := filepath.Dir(path)
-
-    paths, err := collectPaths(root, lang)
-    if err != nil {
-        return nil, err
-    }
-
-    // Ensure that the given file is first in the paths slice
-    paths = ensureFirst(paths, path)
-
-    files, err := pathsToFiles(paths)
-    if err != nil {
-        return nil, err
-    }
-
-    return files, err
-}
-
-func ensureFirst(paths []string, path string) []string {
-    var newPaths = make([]string, 0)
-
-    for _, p := range paths {
-        if p == path {
-            newPaths = append(newPaths, p)
-        }
-    }
-
-    for _, p := range paths {
-        if p != path {
-            newPaths = append(newPaths, p)
-        }
-    }
-
-    return newPaths
-}
-
-func collectPaths(root, lang string) ([]string, error) {
-    var paths = make([]string, 0)
-
-    err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
-        if err != nil {
-            return err
-        }
-
-        // Skip hidden files / dirs
-        if strings.HasPrefix(path, ".") {
-            return nil
-        }
-
-        // Skip directories
-        if info.IsDir() {
-            return nil
-        }
-
-        // Skip non allowed files
-        ext := filepath.Ext(path)[1:]
-        if !language.AllowedExtension(ext, lang) {
-            return nil
-        }
-
-        paths = append(paths, path)
-
-        return nil
-    })
-
-    return paths, err
-}
-
-func pathsToFiles(paths []string) ([]*api.File, error) {
-    var files = make([]*api.File, 0)
-
-    for _, path := range paths {
-        // Read file content
-        bytes, err := ioutil.ReadFile(path)
-        if err != nil {
-            return nil, err
-        }
-
-        files = append(files, &api.File{
-            Name: path,
-            Content: string(bytes),
+func toApiFiles(files []*util.File) []*api.File {
+    apiFiles := make([]*api.File, 0, len(files))
+    for _, f := range files {
+        apiFiles = append(apiFiles, &api.File{
+            Name: f.Name,
+            Content: f.Content,
         })
     }
-
-    return files, nil
+    return apiFiles
 }
