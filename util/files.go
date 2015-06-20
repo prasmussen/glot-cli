@@ -80,7 +80,7 @@ func collectPaths(root string) ([]string, error) {
         }
 
         // Skip hidden files
-        if strings.HasPrefix(info.Name(), ".") {
+        if strings.HasPrefix(path, ".") {
             return nil
         }
 
