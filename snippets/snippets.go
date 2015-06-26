@@ -3,6 +3,7 @@ package snippets
 import (
     "fmt"
     "os"
+    "strings"
     "path/filepath"
     "io/ioutil"
     "../language"
@@ -44,7 +45,6 @@ func NewSnippet(lang string) {
 
 func Publish(cfg config) {
     fmt.Printf("Publishing...\n")
-    basePath, _ := findGlotPath()
 
     f, err := os.Open(".")
     if err != nil {
@@ -87,13 +87,27 @@ func Publish(cfg config) {
         return
     }
 
-    // Write meta file to disk
-    metaFilePath := filepath.Join(basePath, ".glot", "meta")
-    err = writeMetaFile(metaFilePath, snippet.MetaSnippet)
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Failed to write meta file to disk: %s\n", err.Error())
-        return
+    fmt.Printf("Saved snippet %s\n", snippet.Id)
+}
+
+func findMainFile(names []string) string {
+    for _, name := range names {
+        base := filepath.Base(name)
+        if strings.HasPrefix(strings.ToLower(base), "main") {
+            return base
+        }
     }
 
-    fmt.Printf("Saved snippet %s\n", snippet.Id)
+    return names[0]
+}
+
+func toApiFiles(files []*util.File) []*api.File {
+    apiFiles := make([]*api.File, 0, len(files))
+    for _, f := range files {
+        apiFiles = append(apiFiles, &api.File{
+            Name: f.Name,
+            Content: f.Content,
+        })
+    }
+    return apiFiles
 }
