@@ -7,8 +7,8 @@ import (
     "io/ioutil"
     "../language"
     "../util"
-    "./apiurl"
-    "./api"
+    "github.com/prasmussen/glot-api-lib/go/snippets"
+    apiurl "github.com/prasmussen/glot-api-lib/go/snippets/url"
 )
 
 type config interface {

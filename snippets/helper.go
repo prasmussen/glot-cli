@@ -7,8 +7,8 @@ import (
     "io/ioutil"
     "path/filepath"
     "strings"
-    "./api"
     "../util"
+    "github.com/prasmussen/glot-api-lib/go/snippets"
 )
 
 

@@ -3,10 +3,10 @@ package run
 import (
     "fmt"
     "os"
-    "./apiurl"
-    "./api"
     "../util"
     "../language"
+    "github.com/prasmussen/glot-api-lib/go/run"
+    apiurl "github.com/prasmussen/glot-api-lib/go/run/url"
 )
 
 type config interface {
