@@ -4,6 +4,7 @@ import (
     "fmt"
     "os"
     "strings"
+    "strconv"
     "path/filepath"
     "io/ioutil"
     "../language"
@@ -87,7 +88,7 @@ func Publish(cfg config) {
         return
     }
 
-    fmt.Printf("Saved snippet %s\n", snippet.Id)
+    printMeta(snippet)
 }
 
 func findMainFile(names []string) string {
@@ -110,4 +111,17 @@ func toApiFiles(files []*util.File) []*api.File {
         })
     }
     return apiFiles
+}
+
+func printMeta(snippet *api.Snippet) {
+    fmt.Printf("Id: %s\n", snippet.Id)
+    fmt.Printf("Title: %s\n", snippet.Title)
+    fmt.Printf("Language: %s\n", snippet.Language)
+    fmt.Printf("Public: %s\n", strings.Title(strconv.FormatBool(snippet.Public)))
+    fmt.Printf("Created: %s\n", snippet.Created)
+    fmt.Printf("Modified: %s\n", snippet.Modified)
+    fmt.Printf("Owner: %s\n", snippet.Owner)
+    fmt.Printf("Files hash: %s\n", snippet.FilesHash)
+    fmt.Printf("Web Url: %s\n", strings.Replace(snippet.Url, "snippets.glot.io", "glot.io", 1))
+    fmt.Printf("Api Url: %s\n", snippet.Url)
 }
