@@ -197,16 +197,23 @@ func pushNew(cfg config, basePath string) {
         return
     }
 
-    writeSnippet(".", snippet)
+    // Write meta file to disk
+    metaFilePath := filepath.Join(basePath, ".glot", "meta")
+    err = writeMetaFile(metaFilePath, snippet.MetaSnippet)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to write meta file to disk: %s\n", err.Error())
+        return
+    }
+
     fmt.Printf("Saved snippet %s\n", snippet.Id)
 }
 
 func pushUpdate(cfg config, basePath string) {
-    fmt.Println("Updating...")
     // Read meta file
     meta, err := findReadMetaFile()
     if err != nil {
-
+        fmt.Fprintf(os.Stderr, "Failed to read meta file: %s\n", err.Error())
+        return
     }
 
     f, err := os.Open(".")
@@ -221,7 +228,6 @@ func pushUpdate(cfg config, basePath string) {
         return
     }
 
-    // TODO: Preserve main file
     mainFile := findMainFile(names)
 
     files, err := util.ReadFiles(mainFile)
@@ -230,16 +236,10 @@ func pushUpdate(cfg config, basePath string) {
         return
     }
 
-    lang, ok := language.DetermineLanguage(mainFile)
-    if !ok {
-        fmt.Fprintln(os.Stderr, "Failed to determine language")
-        return
-    }
-
     snippetData := &api.SnippetData{
-        Language: lang,
-        Title: "untitled",
-        Public: false,
+        Language: meta.Language,
+        Title: meta.Title,
+        Public: meta.Public,
         Files: toApiFiles(files),
     }
 
@@ -251,6 +251,13 @@ func pushUpdate(cfg config, basePath string) {
         return
     }
 
-    writeSnippet(".", snippet)
+    // Write meta file to disk
+    metaFilePath := filepath.Join(basePath, ".glot", "meta")
+    err = writeMetaFile(metaFilePath, snippet.MetaSnippet)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to write meta file to disk: %s\n", err.Error())
+        return
+    }
+
     fmt.Printf("Updated snippet %s\n", snippet.Id)
 }
