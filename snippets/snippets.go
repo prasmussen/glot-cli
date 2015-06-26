@@ -44,7 +44,7 @@ func NewSnippet(lang string) {
     fmt.Printf("Created %s\n", path)
 }
 
-func Publish(cfg config) {
+func Publish(cfg config, title string) {
     fmt.Printf("Publishing...\n")
 
     f, err := os.Open(".")
@@ -75,7 +75,7 @@ func Publish(cfg config) {
 
     snippetData := &api.SnippetData{
         Language: lang,
-        Title: "untitled",
+        Title: title,
         Public: false,
         Files: toApiFiles(files),
     }
