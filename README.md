@@ -11,16 +11,16 @@ publishing snippets to the [snippets api](https://github.com/prasmussen/glot-sni
 - Save the 'glot' binary to a location in your PATH (i.e. `/usr/local/bin/`)
 
 ### Downloads
-- [glot-freebsd-386 v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnNkdXZU1YcWdDRFE)
-- [glot-freebsd-x64 v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnaW9vXzRhWExfd2c)
-- [glot-linux-386 v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnWkY2MG5wWHJGMmM)
-- [glot-linux-arm v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnbEFzZl9jelF1OTg)
-- [glot-linux-rpi v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnODBfSlV1Q0JiUHc)
-- [glot-linux-x64 v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnRFZOdFJJdkRMbkE)
-- [glot-osx-386 v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnRXpaNTJfZU1ZNmM)
-- [glot-osx-x64 v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6Embna1BCT0oxLWVZUE0)
-- [glot-windows-386.exe v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnblQwVUNQQUpDdU0)
-- [glot-windows-x64.exe v1.0.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnSDNsX3NXUzhBOFk)
+- [glot-freebsd-386 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnVFRpM184dmNxakU)
+- [glot-freebsd-x64 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnbkwyQXQ4bm9LU28)
+- [glot-linux-386 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnLUdDTHFkWHdPVU0)
+- [glot-linux-arm v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnN1RzbmNqVVN6Nzg)
+- [glot-linux-rpi v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6Embndl92SXlYYXBUc2s)
+- [glot-linux-x64 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbncmpnRUxKTEt0SGc)
+- [glot-osx-386 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnLTVFTFYwcXo0cVE)
+- [glot-osx-x64 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6Embnbm9JdENQSTVNdUU)
+- [glot-windows-386.exe v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnbWRNSEtEbi0ya0k)
+- [glot-windows-x64.exe v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnaVQ1RFNOekR3amM)
 
 ## Usage
     glot new <language>  (Create new snippet)
