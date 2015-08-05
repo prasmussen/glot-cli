@@ -11,22 +11,22 @@ publishing snippets to the [snippets api](https://github.com/prasmussen/glot-sni
 - Save the 'glot' binary to a location in your PATH (i.e. `/usr/local/bin/`)
 
 ### Downloads
-- [glot-freebsd-386 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnVFRpM184dmNxakU)
-- [glot-freebsd-x64 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnbkwyQXQ4bm9LU28)
-- [glot-linux-386 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnLUdDTHFkWHdPVU0)
-- [glot-linux-arm v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnN1RzbmNqVVN6Nzg)
-- [glot-linux-rpi v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6Embndl92SXlYYXBUc2s)
-- [glot-linux-x64 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbncmpnRUxKTEt0SGc)
-- [glot-osx-386 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnLTVFTFYwcXo0cVE)
-- [glot-osx-x64 v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6Embnbm9JdENQSTVNdUU)
-- [glot-windows-386.exe v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnbWRNSEtEbi0ya0k)
-- [glot-windows-x64.exe v1.1.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnaVQ1RFNOekR3amM)
+- [glot-freebsd-386 v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnQ3l5cm9yaExqdWM)
+- [glot-freebsd-x64 v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnakZ0b0lYQnB4WkU)
+- [glot-linux-386 v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnaFpQTEVESzgwN0U)
+- [glot-linux-arm v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnLTRGMHpkbDJWRGs)
+- [glot-linux-rpi v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnMkhrdk5MUXFPSEU)
+- [glot-linux-x64 v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbndWZLcFB6TzltRWc)
+- [glot-osx-386 v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnTUc5ZlNsbmtwVnM)
+- [glot-osx-x64 v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnbzZCWVdtdFI3amM)
+- [glot-windows-386.exe v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnZU50SFE5aExzQlU)
+- [glot-windows-x64.exe v1.2.0](https://drive.google.com/uc?id=0B3X9GlR6EmbnclFXaWhmTWk2UGs)
 
 ## Usage
     glot new <language>  (Create new snippet)
     glot run <path>  (Run code)
     glot run <path> --version <version>  (Run code code with a specific language version)
-    glot publish --title <title>  (Publish snippet)
+    glot publish <path> --title <title>  (Publish snippet)
     glot languages  (List available languages available to run)
     glot versions <language>  (List available versions for a language)
     glot help  (Print help)
@@ -40,7 +40,7 @@ publishing snippets to the [snippets api](https://github.com/prasmussen/glot-sni
     foo foo foo foo foo
 
 ###### Publish snippet
-    $ glot publish --title "Print foo"
+    $ glot publish foo.py --title "Print foo"
     Publishing...
     Id: e4t1cn7jgt
     Title: Print foo
