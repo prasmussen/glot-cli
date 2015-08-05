@@ -12,7 +12,7 @@ import (
 )
 
 const (
-    Version = "1.1.0"
+    Version = "1.2.0"
 )
 
 var (
@@ -23,7 +23,7 @@ func main() {
     cli.AddHandler("new <language>", newSnippet, "Create new snippet")
     cli.AddHandler("run <path>", runLatest, "Run code")
     cli.AddHandler("run <path> --version <version>", runVersion, "Run code code with a specific language version")
-    cli.AddHandler("publish --title <title>", publishSnippet, "Publish snippet")
+    cli.AddHandler("publish <path> --title <title>", publishSnippet, "Publish snippet")
     cli.AddHandler("languages", listLanguages, "List available languages available to run")
     cli.AddHandler("versions <language>", listVersions, "List available versions for a language")
     cli.AddHandler("help", printHelp, "Print help")
@@ -42,7 +42,7 @@ func newSnippet(args map[string]string) {
 
 func publishSnippet(args map[string]string) {
     cfg := getConfig()
-    snippets.Publish(cfg, args["title"])
+    snippets.Publish(cfg, args["path"], args["title"])
 }
 
 func listLanguages(args map[string]string) {

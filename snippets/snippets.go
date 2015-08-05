@@ -44,30 +44,16 @@ func NewSnippet(lang string) {
     fmt.Printf("Created %s\n", path)
 }
 
-func Publish(cfg config, title string) {
+func Publish(cfg config, path, title string) {
     fmt.Printf("Publishing...\n")
 
-    f, err := os.Open(".")
+    files, err := util.ReadFile(path)
     if err != nil {
-        fmt.Fprintf(os.Stderr, "Failed to read files: %s\n", err.Error())
+        fmt.Fprintf(os.Stderr, "Failed to read file: %s\n", err.Error())
         return
     }
 
-    names, err := f.Readdirnames(0)
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Failed to read files: %s\n", err.Error())
-        return
-    }
-
-    mainFile := findMainFile(names)
-
-    files, err := util.ReadFiles(mainFile)
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Failed to read files: %s\n", err.Error())
-        return
-    }
-
-    lang, ok := language.DetermineLanguage(mainFile)
+    lang, ok := language.DetermineLanguage(path)
     if !ok {
         fmt.Fprintln(os.Stderr, "Failed to determine language")
         return

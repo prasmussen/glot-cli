@@ -41,15 +41,15 @@ func ListVersions(cfg config, lang string) {
 }
 
 func Run(cfg config, version, path string) {
-    lang, ok := language.DetermineLanguage(path)
-    if !ok {
-        fmt.Fprintln(os.Stderr, "Unknown filetype")
+    files, err := util.ReadFile(path)
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Failed to read file: %s\n", err.Error())
         return
     }
 
-    files, err := util.ReadFiles(path)
-    if err != nil {
-        fmt.Fprintf(os.Stderr, "Failed to read files: %s\n", err.Error())
+    lang, ok := language.DetermineLanguage(path)
+    if !ok {
+        fmt.Fprintln(os.Stderr, "Unknown filetype")
         return
     }
 

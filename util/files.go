@@ -40,6 +40,17 @@ type File struct {
     Content string
 }
 
+func ReadFile (path string) ([]*File, error) {
+    isRegular, err := IsRegularFile(path)
+    if err != nil {
+        return nil, err
+    } else if !isRegular {
+        return nil, fmt.Errorf("File (%s) is not a regular file", path)
+    }
+
+    return pathsToFiles([]string{path})
+}
+
 func ReadFiles(path string) ([]*File, error) {
     isRegular, err := IsRegularFile(path)
     if err != nil {
