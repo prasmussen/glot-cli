@@ -72,11 +72,14 @@ func DefaultContent(lang string) (string, bool) {
 }
 
 func DetermineLanguage(path string) (string, bool) {
-    extension := filepath.Ext(path)[1:]
 
-    for lang, ext := range fileExt {
-        if ext == extension {
-            return lang, true
+    if len(filepath.Ext(path)) != 0 {
+        extension := filepath.Ext(path)[1:]
+
+        for lang, ext := range fileExt {
+            if ext == extension {
+                return lang, true
+            }
         }
     }
 
